@@ -1,0 +1,22 @@
+{
+  "name": "node.js-mentoring",
+  "version": "1.0.0",
+  "description": "Node.js mentoring program homeworks",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nvkuznetsova/Node.js-mentoring.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nvkuznetsova/Node.js-mentoring/issues"
+  },
+  "homepage": "https://github.com/nvkuznetsova/Node.js-mentoring#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
