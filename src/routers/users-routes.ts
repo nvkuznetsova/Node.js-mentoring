@@ -12,6 +12,6 @@ usersRouter.get('/auto', usersController.getAutoSuggestUsers);
 usersRouter.get('/:id', usersController.getUserById);
 usersRouter.post('/create', validator.body(createUpdateUserShema()), usersController.createUser);
 usersRouter.put('/update/:id', validator.body(createUpdateUserShema()), usersController.updateUser);
-usersRouter.put('/delete/:id', usersController.deleteUser);
+usersRouter.delete('/delete/:id', usersController.deleteUser);
 
 export { usersRouter };

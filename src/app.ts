@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import express, { NextFunction, Request, Response } from 'express';
-import { ContainerTypes, ExpressJoiError } from 'express-joi-validation';
+import { ExpressJoiError } from 'express-joi-validation';
 
 import * as routes from './routers';
 
