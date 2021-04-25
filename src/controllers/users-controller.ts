@@ -5,7 +5,10 @@ import { UserRequestSchema } from '../interfaces/user-request-schema';
 import { userService } from '../services';
 import { User, UserDto } from '../types/users';
 
-export const getUsers = async (_, res: Response<User[] | { message: string }>) => {
+export const getUsers = async (
+    _,
+    res: Response<User[] | { message: string }>
+) => {
     const users = await userService.getAll();
 
     if (!users.length) {
@@ -34,7 +37,10 @@ export const getAutoSuggestUsers = async (
     res: Response<User[] | { message: string }>
 ) => {
     const { loginSubstring, limit } = req.query;
-    const response = await userService.getAutoSuggestUsers(loginSubstring, limit);
+    const response = await userService.getAutoSuggestUsers(
+        loginSubstring,
+        limit
+    );
 
     if (!response.length) {
         res.status(404).json({ message: 'Users not found' });
@@ -43,7 +49,10 @@ export const getAutoSuggestUsers = async (
     }
 };
 
-export const createUser = async (req: ValidatedRequest<UserRequestSchema>, res: Response) => {
+export const createUser = async (
+    req: ValidatedRequest<UserRequestSchema>,
+    res: Response
+) => {
     const user: UserDto = {
         ...req.body,
     };
@@ -55,7 +64,6 @@ export const createUser = async (req: ValidatedRequest<UserRequestSchema>, res: 
     } else {
         res.status(404).json({ message: 'Could not create user' });
     }
-
 };
 
 export const updateUser = async (
@@ -74,7 +82,10 @@ export const updateUser = async (
 
 };
 
-export const deleteUser = async (req: Request<{ id: string }>, res: Response) => {
+export const deleteUser = async (
+    req: Request<{ id: string }>,
+    res: Response
+) => {
     const id = +req.params.id;
     const result = await userService.deleteUser(id);
 

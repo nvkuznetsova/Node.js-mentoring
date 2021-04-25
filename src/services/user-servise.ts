@@ -16,8 +16,14 @@ class UserService {
         return await this.repository.getUserById(id);
     }
 
-    public async getAutoSuggestUsers(loginSubstring: string, limit: number): Promise<User[]> {
-        const users = await this.repository.getAutoSuggestUsers(loginSubstring, limit);
+    public async getAutoSuggestUsers(
+        loginSubstring: string,
+        limit: number
+    ): Promise<User[]> {
+        const users = await this.repository.getAutoSuggestUsers(
+            loginSubstring,
+            limit
+        );
 
         return users.filter(({ isDeleted }) => !isDeleted);
     }

@@ -15,9 +15,14 @@ const insertQuery = format(
 );
 const selectQuery = 'SELECT * FROM users;';
 
-const createUsersTable = async () => {
+const insertGroupsQuery = `INSERT INTO groups(name, permissions) VALUES 
+    ('Group1', ARRAY['READ', 'WRITE']),
+    ('Group2', ARRAY['READ', 'WRITE', 'DELETE']),
+    ('Group3', ARRAY['READ', 'SHARE']);`;
+const selectGroupsQuery = 'SELECT * FROM groups;';
+
+const createUsersTable = async (client) => {
     try {
-        await client.connect();
         await client.query(
             `CREATE TABLE IF NOT EXISTS users (
           id SERIAL PRIMARY KEY,
@@ -31,15 +36,60 @@ const createUsersTable = async () => {
 
         const { rows: selectedRows } = await client.query(selectQuery);
         console.log(selectedRows);
-
-        await client.end();
     } catch (err) {
         console.log(err);
     }
 };
 
+const createGroupsTable = async (client) => {
+    try {
+        await client.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`);
+        await client.query(
+            `CREATE TABLE IF NOT EXISTS groups (
+          id UUID DEFAULT uuid_generate_v4(),
+          name VARCHAR(255) UNIQUE NOT NULL,
+          permissions TEXT[] NOT NULL,
+          PRIMARY KEY (id));`
+        );
+
+        await client.query(insertGroupsQuery);
+
+        const { rows: selectedRows } = await client.query(selectGroupsQuery);
+        console.log(selectedRows);
+
+    } catch(err) {
+        console.log(err);
+    }
+}
+
+const createUserGroupTable = async (client) => {
+    try {
+        await client.query(`CREATE TABLE IF NOT EXISTS usergroup (
+            group_id UUID NOT NULL,
+            user_id SERIAL NOT NULL,
+            PRIMARY KEY (group_id, user_id),
+            CONSTRAINT fk_group FOREIGN KEY (group_id) REFERENCES groups (id) ON DELETE CASCADE,
+            CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+        );`);
+    } catch(err) {
+        console.log(err);
+    }
+}
+
+const createTables = async (client) => {
+    try {
+        await client.connect();
+        await createUsersTable(client);
+        await createGroupsTable(client);
+        await createUserGroupTable(client);
+        await client.end();
+    } catch(err) {
+        console.log(err);
+    }
+}
+
 dotenv.config();
 const connectionString = process.env.CONNECTION_STRING;
 
 const client = new Client({ connectionString });
-createUsersTable();
+createTables(client);
