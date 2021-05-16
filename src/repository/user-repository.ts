@@ -11,58 +11,85 @@ export class UserRepository {
     }
 
     public async getAll(): Promise<User[]> {
-        const users = await UserModel.findAll({
-            attributes: ['id', 'login', 'password', 'age', 'isdeleted'],
-            include: 'groups',
-        });
+        try {
+            const users = await UserModel.findAll({
+                attributes: ['id', 'login', 'password', 'age', 'isdeleted'],
+                include: 'groups',
+            });
 
-        return users.map((user: UserEntity) => this.mapper.toDomain(user));
+            return users.map((user: UserEntity) => this.mapper.toDomain(user));
+        } catch (err) {
+            throw err;
+        }
     }
 
     public async getUserById(id: number): Promise<User> {
-        const user = await UserModel.findOne({
-            attributes: ['id', 'login', 'password', 'age', 'isdeleted'],
-            where: { id },
-            include: 'groups',
-        });
+        try {
+            const user = await UserModel.findOne({
+                attributes: ['id', 'login', 'password', 'age', 'isdeleted'],
+                where: { id },
+                include: 'groups',
+            });
 
-        return user ? this.mapper.toDomain(user) : null;
+            return user ? this.mapper.toDomain(user) : null;
+        } catch (err) {
+            throw err;
+        }
     }
 
     public async getAutoSuggestUsers(
         loginSubstring: string,
         limit: number
     ): Promise<User[]> {
-        const users = await UserModel.findAll({
-            attributes: ['id', 'login', 'password', 'age', 'isdeleted'],
-            where: { login: { [Op.like]: `%${loginSubstring}%` } },
-            limit,
-        });
+        try {
+            const users = await UserModel.findAll({
+                attributes: ['id', 'login', 'password', 'age', 'isdeleted'],
+                where: { login: { [Op.like]: `%${loginSubstring}%` } },
+                limit,
+            });
 
-        return users.map((user: UserEntity) => this.mapper.toDomain(user));
+            return users.map((user: UserEntity) => this.mapper.toDomain(user));
+        } catch (err) {
+            throw err;
+        }
     }
 
     public async createUser(user: UserDto): Promise<number> {
-        const userEntity = this.mapper.toEntity({ ...user, isDeleted: false });
-        const { id } = await UserModel.create(userEntity);
+        try {
+            const userEntity = this.mapper.toEntity({
+                ...user,
+                isDeleted: false,
+            });
+            const { id } = await UserModel.create(userEntity);
 
-        return id;
+            return id;
+        } catch (err) {
+            throw err;
+        }
     }
 
     public async updateUser(id: number, user: UserDto): Promise<number> {
-        const userEntity = this.mapper.toEntity({ ...user });
-        const [res] = await UserModel.update(userEntity, { where: { id } });
+        try {
+            const userEntity = this.mapper.toEntity({ ...user });
+            const [res] = await UserModel.update(userEntity, { where: { id } });
 
-        return res;
+            return res;
+        } catch (err) {
+            throw err;
+        }
     }
 
     public async deleteUser(id: number): Promise<number> {
-        const [res] = await UserModel.update(
-            { isdeleted: true },
-            { where: { id } }
-        );
+        try {
+            const [res] = await UserModel.update(
+                { isdeleted: true },
+                { where: { id } }
+            );
 
-        return res;
+            return res;
+        } catch (err) {
+            throw err;
+        }
     }
 }
 

@@ -4,7 +4,7 @@ export type User = {
     password: string;
     age: number;
     isDeleted: boolean;
-    groups?: object[],
+    groups?: object[];
 };
 
 export type UserDto = {
