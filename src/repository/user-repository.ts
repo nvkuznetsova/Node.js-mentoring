@@ -13,6 +13,7 @@ export class UserRepository {
     public async getAll(): Promise<User[]> {
         const users = await UserModel.findAll({
             attributes: ['id', 'login', 'password', 'age', 'isdeleted'],
+            include: 'groups',
         });
 
         return users.map((user: UserEntity) => this.mapper.toDomain(user));
@@ -22,12 +23,16 @@ export class UserRepository {
         const user = await UserModel.findOne({
             attributes: ['id', 'login', 'password', 'age', 'isdeleted'],
             where: { id },
+            include: 'groups',
         });
 
         return user ? this.mapper.toDomain(user) : null;
     }
 
-    public async getAutoSuggestUsers(loginSubstring: string, limit: number): Promise<User[]> {
+    public async getAutoSuggestUsers(
+        loginSubstring: string,
+        limit: number
+    ): Promise<User[]> {
         const users = await UserModel.findAll({
             attributes: ['id', 'login', 'password', 'age', 'isdeleted'],
             where: { login: { [Op.like]: `%${loginSubstring}%` } },
@@ -52,7 +57,10 @@ export class UserRepository {
     }
 
     public async deleteUser(id: number): Promise<number> {
-        const [res] = await UserModel.update({ isdeleted: true }, { where: { id } });
+        const [res] = await UserModel.update(
+            { isdeleted: true },
+            { where: { id } }
+        );
 
         return res;
     }
