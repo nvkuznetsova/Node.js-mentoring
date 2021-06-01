@@ -6,34 +6,54 @@ import { GroupDTO } from './../types/group';
 
 export class GroupRepository {
     public async getAll(): Promise<Group[]> {
-        const groups = await GroupModel.findAll({
-            attributes: ['id', 'name', 'permissions'],
-            include: 'users',
-        });
-        return groups;
+        try {
+            const groups = await GroupModel.findAll({
+                attributes: ['id', 'name', 'permissions'],
+                include: 'users',
+            });
+            return groups;
+        } catch (err) {
+            throw err;
+        }
     }
 
     public async getGroupById(id: string): Promise<Group> {
-        const group = GroupModel.findByPk(id, {
-            attributes: ['id', 'name', 'permissions'],
-            include: 'users',
-        });
-        return group ? group : null;
+        try {
+            const group = GroupModel.findByPk(id, {
+                attributes: ['id', 'name', 'permissions'],
+                include: 'users',
+            });
+            return group ? group : null;
+        } catch (err) {
+            throw err;
+        }
     }
 
     public async createGroup(group: GroupDTO): Promise<string> {
-        const { id } = await GroupModel.create(group);
-        return id;
+        try {
+            const { id } = await GroupModel.create(group);
+            return id;
+        } catch (err) {
+            throw err;
+        }
     }
 
     public async udateGroup(id: string, group: GroupDTO): Promise<string> {
-        const [res] = await GroupModel.update(group, { where: { id } });
-        return res ? id : null;
+        try {
+            const [res] = await GroupModel.update(group, { where: { id } });
+            return res ? id : null;
+        } catch (err) {
+            throw err;
+        }
     }
 
     public async deleteGroup(id: string): Promise<number> {
-        const res = await GroupModel.destroy({ where: { id } });
-        return res;
+        try {
+            const res = await GroupModel.destroy({ where: { id } });
+            return res;
+        } catch (err) {
+            throw err;
+        }
     }
 
     public async addUsersToGroup(
@@ -45,13 +65,13 @@ export class GroupRepository {
             user_id: id,
         }));
         try {
-            const res = await sequelize.transaction(async (t) =>
-                await UserGroup.bulkCreate(groupUsers, { transaction: t })
+            const res = await sequelize.transaction(
+                async (t) =>
+                    await UserGroup.bulkCreate(groupUsers, { transaction: t })
             );
             return res;
         } catch (err) {
-            // tslint:disable-next-line: no-console
-            console.log(err);
+            throw err;
         }
     }
 }

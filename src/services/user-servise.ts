@@ -7,37 +7,61 @@ class UserService {
         this.repository = repository;
     }
     public async getAll(): Promise<User[]> {
-        const users = await this.repository.getAll();
+        try {
+            const users = await this.repository.getAll();
 
-        return users.filter(({ isDeleted }) => !isDeleted);
+            return users.filter(({ isDeleted }) => !isDeleted);
+        } catch (err) {
+            throw err;
+        }
     }
 
     public async getUserById(id: number): Promise<User> {
-        return await this.repository.getUserById(id);
+        try {
+            return await this.repository.getUserById(id);
+        } catch (err) {
+            throw err;
+        }
     }
 
     public async getAutoSuggestUsers(
         loginSubstring: string,
         limit: number
     ): Promise<User[]> {
-        const users = await this.repository.getAutoSuggestUsers(
-            loginSubstring,
-            limit
-        );
+        try {
+            const users = await this.repository.getAutoSuggestUsers(
+                loginSubstring,
+                limit
+            );
 
-        return users.filter(({ isDeleted }) => !isDeleted);
+            return users.filter(({ isDeleted }) => !isDeleted);
+        } catch (err) {
+            throw err;
+        }
     }
 
     public async createUser(user: UserDto): Promise<number> {
-        return await this.repository.createUser(user);
+        try {
+            return await this.repository.createUser(user);
+        } catch (err) {
+            throw err;
+        }
     }
 
     public async updateUser(id: number, user: UserDto): Promise<number> {
-        return await this.repository.updateUser(id, user);
+        try {
+            return await this.repository.updateUser(id, user);
+        } catch (err) {
+            throw err;
+        }
     }
 
     public async deleteUser(id: number): Promise<number> {
-        return await this.repository.deleteUser(id);
+        try {
+            return await this.repository.deleteUser(id);
+        } catch (err) {
+            throw err;
+        }
     }
 }
 
