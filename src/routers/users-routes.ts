@@ -2,11 +2,13 @@ import { Router } from 'express';
 import { createValidator } from 'express-joi-validation';
 
 import * as usersController from '../controllers';
+import { loginController } from '../controllers';
 import { createUpdateUserShema } from '../functions/user-schema';
 
 const usersRouter = Router();
 const validator = createValidator({ passError: true });
 
+usersRouter.use(loginController.checkToken);
 usersRouter.get('/', usersController.getUsers);
 usersRouter.get('/auto', usersController.getAutoSuggestUsers);
 usersRouter.get('/:id', usersController.getUserById);

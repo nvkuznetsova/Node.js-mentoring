@@ -1,7 +1,7 @@
 import { userRepository, UserRepository } from '../repository';
 import { User, UserDto } from '../types/users';
 
-class UserService {
+export class UserService {
     private repository: UserRepository;
     constructor(repository: UserRepository) {
         this.repository = repository;
@@ -59,6 +59,15 @@ class UserService {
     public async deleteUser(id: number): Promise<number> {
         try {
             return await this.repository.deleteUser(id);
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    public async login(login: string, password: string): Promise<User> {
+        try {
+            const user = await this.repository.login(login, password);
+            return !user.isDeleted ? user : null;
         } catch (err) {
             throw err;
         }
