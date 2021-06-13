@@ -1,7 +1,8 @@
 import { Op } from 'sequelize';
 
 import { UserDataMapper, userMapper } from '../mappers';
-import { User as UserModel } from '../models';
+import { User as UserModel, UserGroup } from '../models';
+import { sequelize } from '../models/connect';
 import { User, UserDto, UserEntity } from '../types/users';
 
 export class UserRepository {
@@ -81,12 +82,33 @@ export class UserRepository {
 
     public async deleteUser(id: number): Promise<number> {
         try {
-            const [res] = await UserModel.update(
-                { isdeleted: true },
-                { where: { id } }
-            );
+            const res = await sequelize.transaction(async (t) => {
+                const [response] = await UserModel.update(
+                    { isdeleted: true },
+                    { where: { id }, transaction: t }
+                );
+                await UserGroup.destroy({
+                    where: { user_id: id },
+                    transaction: t,
+                });
+
+                return response;
+            });
 
             return res;
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    public async login(login: string, password: string): Promise<User> {
+        try {
+            const user = await UserModel.findOne({
+                attributes: ['id', 'login', 'password', 'age', 'isdeleted'],
+                where: { login, password },
+            });
+
+            return user ? this.mapper.toDomain(user) : null;
         } catch (err) {
             throw err;
         }

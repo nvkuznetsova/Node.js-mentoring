@@ -1,7 +1,7 @@
+import cors from 'cors';
 import dotenv from 'dotenv';
 import express, { NextFunction, Request, Response } from 'express';
 import { ExpressJoiError } from 'express-joi-validation';
-import winston from 'winston';
 
 import { LoggerData } from './interfaces/logger-data';
 import { winstonLogger } from './loggers';
@@ -14,8 +14,10 @@ const app = express();
 const port = process.env.PORT;
 
 app.use(express.json());
+app.use(cors());
 app.use('/users', routes.usersRouter);
 app.use('/groups', routes.groupsRouter);
+app.use('/login', routes.loginRouter);
 app.use('/error', (_, res, next) => next(new Error('error')));
 
 app.use((_, res: Response) => {
