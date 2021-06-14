@@ -38,7 +38,7 @@ export class GroupRepository {
         }
     }
 
-    public async udateGroup(id: string, group: GroupDTO): Promise<string> {
+    public async updateGroup(id: string, group: GroupDTO): Promise<string> {
         try {
             const [res] = await GroupModel.update(group, { where: { id } });
             return res ? id : null;
