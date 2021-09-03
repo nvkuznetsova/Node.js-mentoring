@@ -40,7 +40,7 @@ class GroupController {
             });
             next(err);
         }
-    };
+    }
 
     public getGroupById = async (
         req: Request<{ id: string }>,
@@ -70,7 +70,7 @@ class GroupController {
             });
             next(err);
         }
-    };
+    }
 
     public createGroup = async (
         req: ValidatedRequest<GroupRequestSchema>,
@@ -102,9 +102,9 @@ class GroupController {
             });
             next(err);
         }
-    };
+    }
 
-    public udateGroup = async (
+    public updateGroup = async (
         req: ValidatedRequest<GroupRequestSchema>,
         res: Response,
         next: NextFunction
@@ -113,7 +113,7 @@ class GroupController {
         const id = req.params.id;
 
         try {
-            const result = await this.service.udateGroup(id, group);
+            const result = await this.service.updateGroup(id, group);
             res.locals.serviceMethod = 'groupService.udateGroup';
             res.locals.args = { id, ...group };
 
@@ -135,7 +135,7 @@ class GroupController {
             });
             next(err);
         }
-    };
+    }
 
     public deleteGroup = async (
         req: Request<{ id: string }>,
@@ -167,7 +167,7 @@ class GroupController {
             });
             next(err);
         }
-    };
+    }
 
     public addUsersToGroup = async (
         req: Request<{ id: string }, UserGroup[], { userIds: number[] }>,
@@ -182,7 +182,7 @@ class GroupController {
             res.locals.serviceMethod = 'groupService.addUsersToGroup';
             res.locals.args = { groupId, userIds };
 
-            if (result) {
+            if (result.length) {
                 res.status(201).json({
                     message: `Users ${userIds} added to group ${groupId}`,
                 });
@@ -200,7 +200,7 @@ class GroupController {
             });
             next(err);
         }
-    };
+    }
 }
 
 export const groupController = new GroupController(groupService);

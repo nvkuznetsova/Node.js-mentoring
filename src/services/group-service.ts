@@ -32,9 +32,9 @@ export class GroupService {
         }
     }
 
-    public async udateGroup(id: string, group: GroupDTO): Promise<string> {
+    public async updateGroup(id: string, group: GroupDTO): Promise<string> {
         try {
-            return await this.repository.udateGroup(id, group);
+            return await this.repository.updateGroup(id, group);
         } catch (err) {
             throw err;
         }

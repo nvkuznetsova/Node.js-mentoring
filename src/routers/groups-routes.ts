@@ -19,7 +19,7 @@ groupsRouter.post(
 groupsRouter.put(
     '/update/:id',
     validator.body(createUpdateGroupSchema()),
-    groupController.udateGroup
+    groupController.updateGroup
 );
 groupsRouter.delete('/delete/:id', groupController.deleteGroup);
 groupsRouter.post('/addUsersToGroup/:id', groupController.addUsersToGroup);

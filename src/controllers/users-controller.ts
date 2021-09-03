@@ -50,7 +50,7 @@ export const getUserById = async (
         res.locals.args = { id };
 
         if (user === null) {
-            res.status(404).json({ message: `User with id ${id} not found` });
+            res.status(404).json({ message: `User with id: ${id} not found` });
         } else {
             res.json(user);
         }
@@ -143,7 +143,7 @@ export const updateUser = async (
         if (result) {
             res.status(200).json({ message: `User with id: ${id} updated` });
         } else {
-            res.status(404).json({ message: `User with id ${id} not found` });
+            res.status(404).json({ message: `User with id: ${id} not found` });
         }
 
         next();
@@ -171,7 +171,7 @@ export const deleteUser = async (
         if (result) {
             res.status(200).json({ message: `User with id: ${id} deleted` });
         } else {
-            res.status(404).json({ message: `User with id ${id} not found` });
+            res.status(404).json({ message: `User with id: ${id} not found` });
         }
 
         next();
